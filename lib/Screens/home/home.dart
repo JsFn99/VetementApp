@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import '../../components/bottomBar.dart';
 import '../login/login.dart';
+import '../cart/cart.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +15,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String userEmail = "Loading...";
   int _selectedIndex = 0;
 
+  // Firebase Realtime Database reference
+  final databaseRef = FirebaseDatabase.instance.ref('clothes');
+
   @override
   void initState() {
     super.initState();
@@ -20,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _fetchUserEmail() {
     setState(() {
-      userEmail = "user@example.com";
+      userEmail = "user@example.com"; // Replace with actual user data
     });
   }
 
@@ -28,13 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    // Handle different screens or actions based on the selected index
+    // Handle navigation based on selected index
     if (index == 0) {
-      // Navigate to 'Acheter' screen
+      Navigator.pushReplacementNamed(context, '/home');
     } else if (index == 1) {
-      // Navigate to 'Panier' screen
+      Navigator.pushReplacementNamed(context, '/cart');
     } else if (index == 2) {
-      // Navigate to 'Profil' screen
+      Navigator.pushReplacementNamed(context, '/profile');
     }
   }
 
@@ -51,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color(0xFF2661FA),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -60,71 +66,73 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: theme.cardColor,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      spreadRadius: 2,
-                      blurRadius: 8,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Bienvenue dans notre application de vente de vêtements !",
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      "Ici, vous pouvez acheter des vêtements de qualité.",
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            // Clothes List from Firebase
+            Expanded(
+              child: StreamBuilder(
+                stream: databaseRef.onValue,
+                builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return const Center(child: Text("Erreur lors du chargement des vêtements."));
+                  }
+                  if (!snapshot.hasData || snapshot.data!.snapshot.value == null) {
+                    return const Center(child: Text("Aucun vêtement disponible."));
+                  }
+
+                  // Convert Firebase data into List
+                  final clothesList = (snapshot.data!.snapshot.value as List?)?.whereType<Map>().toList() ?? [];
+
+                  return ListView.builder(
+                    itemCount: clothesList.length,
+                    itemBuilder: (context, index) {
+                      final item = clothesList[index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: ListTile(
+                          leading: Image.network(
+                            item['imageUrl'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Text(item['title']),
+                          subtitle: Text(
+                            "Catégorie: ${item['category']}\nTaille: ${item['size']} - ${item['brand']}\nPrix: \$${item['price']}",
+                          ),
+                          onTap: () {
+                            print('Navigating with data: ${item}'); // Debug print
+                            Navigator.pushNamed(
+                              context,
+                              '/details',
+                              arguments: {
+                                'title': item['title'],
+                                'category': item['category'],
+                                'size': item['size'],
+                                'brand': item['brand'],
+                                'price': item['price'],
+                                'imageUrl': item['imageUrl'],
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Icon(Icons.arrow_back),
-        backgroundColor: const Color(0xFF2661FA),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        backgroundColor: Colors.blue[100],
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag, color: Colors.blue),
-            label: 'Acheter',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart, color: Colors.blue),
-            label: 'Panier',
-
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: Colors.blue),
-            label: 'Profil',
-          ),
-        ],
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }
