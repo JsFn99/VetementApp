@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "108024299882",
+    "project_id": "vetements-3a4cb",
+    "storage_bucket": "vetements-3a4cb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:108024299882:android:6a0001bc551f958167a513",
+        "android_client_info": {
+          "package_name": "com.fnine.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSo6mgwE-4pNnaTTUTRbGuLpStGUmH5zs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
