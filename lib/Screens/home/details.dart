@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DetailScreen extends StatelessWidget {
   const DetailScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Safely cast the arguments to Map<String, dynamic>
     final data = ModalRoute.of(context)!.settings.arguments as Map?;
 
     if (data == null || data is! Map<String, dynamic>) {
@@ -21,79 +21,136 @@ class DetailScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: const Color(0xFFE6F1FD), // Light blue background
       appBar: AppBar(
-        title: Text(data['title']),
-        backgroundColor: const Color(0xFF2661FA),
-        elevation: 4,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/cart');
+            },
+            icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
+          ),
+        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image of the clothing item with rounded corners and a shadow
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+      body: Column(
+        children: [
+          // Top Image Section
+          Container(
+            height: MediaQuery.of(context).size.height * 0.35,
+            child: Center(
               child: Image.network(
                 data['imageUrl'],
-                height: 250,
-                width: double.infinity,
-                fit: BoxFit.contain, // Better scaling for the image
+                fit: BoxFit.contain,
+                height: 300,
               ),
             ),
-            const SizedBox(height: 24),
-            // Title with bold and large text
-            Text(
-              data['title'],
-              style: const TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+          ),
+          // Bottom Details Section filling remaining space
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(
+                  top: 40, right: 20, left: 20, bottom: 20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data['brand'] ?? 'Brand',
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          data['title'],
+                          style: GoogleFonts.poppins(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          "\$${data['price']}",
+                          style: GoogleFonts.poppins(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF2661FA),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 15),
+                    Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+                          "Pellentesque auctor consectetur tortor vitae interdum.",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 16),
-            // Category
-            _buildDetailRow("Catégorie", data['category']),
-            const SizedBox(height: 8),
-            // Size
-            _buildDetailRow("Taille", data['size']),
-            const SizedBox(height: 8),
-            // Brand
-            _buildDetailRow("Marque", data['brand']),
-            const SizedBox(height: 8),
-            // Price
-            Text(
-              "Prix : \$${data['price']}",
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        height: 70,
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Favorite Button
+            Container(
+              width: 50,
+              height: 50,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey),
               ),
+              child: const Icon(Icons.favorite_border, color: Colors.grey),
             ),
-            const SizedBox(height: 24),
-            // Add to cart button
-            Center(
+            const SizedBox(width: 20),
+            // Add to Cart Button
+            Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // Action to add the item to the cart
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Ajouté au panier")),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2661FA), // Button color
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 15.0, horizontal: 40.0),
+                  backgroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(15),
                   ),
                 ),
                 child: const Text(
                   'Ajouter au Panier',
                   style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),
                 ),
@@ -102,25 +159,6 @@ class DetailScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Row(
-      children: [
-        Text(
-          "$label : ",
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        Text(
-          value,
-          style: TextStyle(fontSize: 18, color: Colors.grey[700]),
-        ),
-      ],
     );
   }
 }
