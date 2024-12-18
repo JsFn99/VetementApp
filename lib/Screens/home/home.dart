@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import '../../components/bottomBar.dart';
 import '../login/login.dart';
 import '../cart/cart.dart';
+import '../profil/profil.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String userEmail = "Loading...";
   int _selectedIndex = 0;
+  final PageController _pageController = PageController();
 
   // Firebase Realtime Database reference
   final databaseRef = FirebaseDatabase.instance.ref('clothes');
@@ -34,21 +36,14 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    // Handle navigation based on selected index
-    if (index == 0) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/cart');
-    } else if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/profile');
-    }
+    _pageController.jumpToPage(index);
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           "Magasin de vêtements",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
@@ -66,73 +61,89 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Clothes List from Firebase
-            Expanded(
-              child: StreamBuilder(
-                stream: databaseRef.onValue,
-                builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.hasError) {
-                    return const Center(child: Text("Erreur lors du chargement des vêtements."));
-                  }
-                  if (!snapshot.hasData || snapshot.data!.snapshot.value == null) {
-                    return const Center(child: Text("Aucun vêtement disponible."));
-                  }
-
-                  // Convert Firebase data into List
-                  final clothesList = (snapshot.data!.snapshot.value as List?)?.whereType<Map>().toList() ?? [];
-
-                  return ListView.builder(
-                    itemCount: clothesList.length,
-                    itemBuilder: (context, index) {
-                      final item = clothesList[index];
-                      return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: ListTile(
-                          leading: Image.network(
-                            item['imageUrl'],
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
-                          ),
-                          title: Text(item['title']),
-                          subtitle: Text(
-                            "Catégorie: ${item['category']}\nTaille: ${item['size']} - ${item['brand']}\nPrix: \$${item['price']}",
-                          ),
-                          onTap: () {
-                            print('Navigating with data: ${item}'); // Debug print
-                            Navigator.pushNamed(
-                              context,
-                              '/details',
-                              arguments: {
-                                'title': item['title'],
-                                'category': item['category'],
-                                'size': item['size'],
-                                'brand': item['brand'],
-                                'price': item['price'],
-                                'imageUrl': item['imageUrl'],
-                              },
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        children: [
+          _buildHomePage(),
+          const CartScreen(fromDetails: false),
+          const ProfileScreen(),
+        ],
       ),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
+      ),
+    );
+  }
+
+  Widget _buildHomePage() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          // Clothes List from Firebase
+          Expanded(
+            child: StreamBuilder(
+              stream: databaseRef.onValue,
+              builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return const Center(child: Text("Erreur lors du chargement des vêtements."));
+                }
+                if (!snapshot.hasData || snapshot.data!.snapshot.value == null) {
+                  return const Center(child: Text("Aucun vêtement disponible."));
+                }
+
+                // Convert Firebase data into List
+                final clothesList = (snapshot.data!.snapshot.value as List?)?.whereType<Map>().toList() ?? [];
+
+                return ListView.builder(
+                  itemCount: clothesList.length,
+                  itemBuilder: (context, index) {
+                    final item = clothesList[index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: ListTile(
+                        leading: Image.network(
+                          item['imageUrl'],
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        ),
+                        title: Text(item['title']),
+                        subtitle: Text(
+                          "Catégorie: ${item['category']}\nTaille: ${item['size']} - ${item['brand']}\nPrix: \$${item['price']}",
+                        ),
+                        onTap: () {
+                          print('Navigating with data: ${item}'); // Debug print
+                          Navigator.pushNamed(
+                            context,
+                            '/details',
+                            arguments: {
+                              'title': item['title'],
+                              'category': item['category'],
+                              'size': item['size'],
+                              'brand': item['brand'],
+                              'price': item['price'],
+                              'imageUrl': item['imageUrl'],
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -71,6 +71,9 @@ PODS:
     - GoogleUtilities/Privacy
   - GTMSessionFetcher/Core (4.1.0)
   - leveldb-library (1.22.6)
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - RecaptchaInterop (100.0.0)
 
 DEPENDENCIES:
@@ -78,6 +81,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
   - Flutter (from `Flutter`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -104,6 +108,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_database/ios"
   Flutter:
     :path: Flutter
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
 
 SPEC CHECKSUMS:
   Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
@@ -122,6 +128,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   GTMSessionFetcher: 923b710231ad3d6f3f0495ac1ced35421e07d9a6
   leveldb-library: cc8b8f8e013647a295ad3f8cd2ddf49a6f19be19
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
 
 PODFILE CHECKSUM: 351dbda8241c6ae667acbc7bc0353a0d9978d7f1

@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../cart/cart.dart';
 
 class DetailScreen extends StatelessWidget {
   const DetailScreen({Key? key}) : super(key: key);
@@ -32,7 +36,13 @@ class DetailScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/cart');
+              // In the Details screen, navigate to CartScreen with fromDetails set to true
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CartScreen(fromDetails: true),
+                ),
+              );
             },
             icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
           ),
@@ -134,11 +144,31 @@ class DetailScreen extends StatelessWidget {
             // Add to Cart Button
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Ajouté au panier")),
-                  );
+                onPressed: () async {
+                  final user = FirebaseAuth.instance.currentUser;
+                  if (user != null) {
+                    final cartRef = FirebaseDatabase.instance.ref('cart/${user.uid}');
+
+                    // Generate a unique key for the cart item
+                    final newItemRef = cartRef.push();
+
+                    await newItemRef.set({
+                      'imageUrl': data['imageUrl'],
+                      'title': data['title'],
+                      'size': data['size'],
+                      'price': data['price'],
+                    });
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Ajouté au panier")),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Erreur : Veuillez vous reconnecter.")),
+                    );
+                  }
                 },
+
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   padding: const EdgeInsets.symmetric(vertical: 15),
