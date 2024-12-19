@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../model/clothing_classifier.dart';
 
@@ -18,26 +19,24 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
   final TextEditingController _brandController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _imageUrlController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController(); // New controller for category
+  final TextEditingController _categoryController = TextEditingController();
 
   final DatabaseReference _dbRef = FirebaseDatabase.instance.ref('clothes');
   final ClothingClassifier _classifier = ClothingClassifier();
 
   String? _previewImageUrl;
-  String? _predictedCategory; // Holds the predicted category
-  bool _isLoading = false; // Indicates if the model is processing
+  String? _predictedCategory;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
 
-    // Add a listener to process the image URL and predict category
     _imageUrlController.addListener(() {
       setState(() {
         _previewImageUrl = _imageUrlController.text.trim();
       });
 
-      // Automatically predict category when the URL changes
       if (_previewImageUrl != null && _previewImageUrl!.isNotEmpty) {
         _predictCategory();
       }
@@ -47,7 +46,7 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
   @override
   void dispose() {
     _imageUrlController.dispose();
-    _categoryController.dispose(); // Dispose the category controller
+    _categoryController.dispose();
     super.dispose();
   }
 
@@ -58,26 +57,23 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
         _predictedCategory = null;
       });
 
-      // Fetch the image from the URL
       final response = await http.get(Uri.parse(_previewImageUrl!));
       if (response.statusCode == 200) {
         final imageData = response.bodyBytes;
-
-        // Run the prediction
         final result = await _classifier.predict(imageData);
         setState(() {
-          _predictedCategory = result['category']; // Set the predicted category
-          _categoryController.text = _predictedCategory ?? ''; // Fill category field
+          _predictedCategory = result['category'];
+          _categoryController.text = _predictedCategory ?? '';
           _isLoading = false;
         });
       } else {
         throw Exception('Image not found');
       }
     } catch (e) {
-      print('Prediction error: $e'); // Log the error
+      print('Prediction error: $e');
       setState(() {
         _predictedCategory = 'Erreur lors de la prédiction';
-        _categoryController.text = _predictedCategory ?? ''; // Handle prediction failure
+        _categoryController.text = _predictedCategory ?? '';
         _isLoading = false;
       });
     }
@@ -92,12 +88,12 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
           'brand': _brandController.text,
           'price': double.tryParse(_priceController.text) ?? 0.0,
           'imageUrl': _imageUrlController.text,
-          'category': _predictedCategory, // Add the predicted category
+          'category': _predictedCategory,
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Article ajouté avec succès')),
         );
-        Navigator.pop(context); // Go back to the HomeScreen
+        Navigator.pop(context);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erreur: ${e.toString()}')),
@@ -114,8 +110,7 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ajouter un article',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        title: const Text('Ajouter un article', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
         backgroundColor: const Color(0xFF2661FA),
       ),
       body: Padding(
@@ -155,17 +150,16 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
                   ),
                 const SizedBox(height: 16),
 
-                // Predicted Category Field (non-editable)
+                // Predicted Category Field
                 if (_isLoading)
                   const Center(child: CircularProgressIndicator())
                 else
                   TextFormField(
                     controller: _categoryController,
                     decoration: const InputDecoration(labelText: 'Catégorie'),
-                    enabled: false, // Non-editable field
+                    enabled: false,
                     style: TextStyle(color: Colors.black),
                   ),
-
                 const SizedBox(height: 16),
 
                 // Title Field

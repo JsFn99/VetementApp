@@ -130,7 +130,7 @@ class _CartScreenState extends State<CartScreen> {
                           "Taille : ${item['size']}\nPrix : \$${item['price']}"),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete,
-                            color: Colors.orangeAccent),
+                            color: Color(0xFFFFA500)), // Orange pour la suppression
                         onPressed: () => _removeItem(index),
                       ),
                     ),
@@ -141,7 +141,7 @@ class _CartScreenState extends State<CartScreen> {
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Color(0xFFE6F1FD),
+                color: const Color(0xFFE6F1FD), // Bleu clair
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(16),
                 ),
@@ -161,7 +161,7 @@ class _CartScreenState extends State<CartScreen> {
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.orange,
+                      color: Color(0xFFFFA500), // Total en orange
                     ),
                   ),
                 ],

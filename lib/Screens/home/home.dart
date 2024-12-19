@@ -34,10 +34,14 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         title: const Text(
           "Magasin de vêtements",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 20,
+          ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFF2661FA),
+        backgroundColor: const Color(0xFF1E90FF), // Bleu océan
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
@@ -99,16 +103,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     final item = clothesList[index] as Map;
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10), // Coins arrondis
+                      ),
+                      color: const Color(0xFFFFFFFF), // Fond blanc
+                      elevation: 4, // Ombre douce
                       child: ListTile(
-                        leading: Image.network(
-                          item['imageUrl'],
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(8), // Coins arrondis des images
+                          child: Image.network(
+                            item['imageUrl'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        title: Text(item['title']),
+                        title: Text(
+                          item['title'],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2C2C2C), // Noir doux
+                          ),
+                        ),
                         subtitle: Text(
-                            "Taille: ${item['size']}\nPrix: \$${item['price']}"
+                          "Taille: ${item['size']}\nPrix: \$${item['price']}",
+                          style: const TextStyle(
+                            color: Color(0xFF2C2C2C),
+                          ),
                         ),
                         onTap: () {
                           Navigator.pushNamed(
