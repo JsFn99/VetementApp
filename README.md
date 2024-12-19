@@ -1,17 +1,24 @@
-# tp2_vetements
+# Magasin de Vêtements
 
-A new Flutter project.
+Ce projet est une application de magasin de vêtements développée avec Flutter et Firebase. Elle permet aux utilisateurs de s'inscrire, de se connecter, de parcourir des articles de vêtements, d'ajouter des articles à leur panier et de gérer leur profil.
 
-## Getting Started
+## Fonctionnalités
 
-This project is a starting point for a Flutter application.
+- **Authentification** : Inscription et connexion des utilisateurs via Firebase Authentication.
+- **Gestion du profil** : Les utilisateurs peuvent consulter et mettre à jour leurs informations de profil.
+- **Parcourir les articles** : Affichage des articles de vêtements disponibles à partir de Firebase Realtime Database.
+- **Ajouter au panier** : Les utilisateurs peuvent ajouter des articles à leur panier et consulter le contenu de leur panier.
+- **Prédiction de catégorie** : Utilisation d'un modèle TensorFlow Lite pour prédire la catégorie d'un vêtement à partir de son URL d'image.
 
-A few resources to get you started if this is your first Flutter project:
+## Prérequis
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter SDK
+- Firebase project configuré
+- Un éditeur de code comme IntelliJ IDEA
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# VetementApp
+## Installation
+
+1. Clonez ce dépôt :
+   ```sh
+   git clone https://github.com/JsFn99/VetementApp
+   cd VetementApp
