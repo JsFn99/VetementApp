@@ -21,18 +21,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // Firebase Realtime Database reference
   final databaseRef = FirebaseDatabase.instance.ref('clothes');
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchUserEmail();
-  }
-
-  void _fetchUserEmail() {
-    setState(() {
-      userEmail = "user@example.com"; // Replace with actual user data
-    });
-  }
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

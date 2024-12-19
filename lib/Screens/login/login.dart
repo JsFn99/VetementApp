@@ -29,7 +29,13 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Login successful!")),
+        const SnackBar(
+          content: Text(
+            "Connexion réussie !",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+        ),
       );
 
       Navigator.pushReplacement(
@@ -39,18 +45,17 @@ class _LoginScreenState extends State<LoginScreen> {
     } on FirebaseAuthException catch (e) {
       String message;
       if (e.code == 'user-not-found') {
-        message = 'No user found for that email.';
+        message = 'Aucun utilisateur trouvé pour cet e-mail.';
       } else if (e.code == 'wrong-password') {
-        message = 'Wrong password provided for that user.';
+        message = 'Mauvais mot de passe. Veuillez réessayer.';
       } else {
-        message = 'An error occurred. Please try again.';
+        message = 'Une erreur inattendue s\'est produite. Veuillez réessayer.';
       }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
+        SnackBar(content: Text(message, style: const TextStyle(color: Colors.white)), backgroundColor: Colors.red),
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

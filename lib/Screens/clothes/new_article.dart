@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
 
-import 'clothing_classifier.dart';
+import '../../model/clothing_classifier.dart';
 
 class NewArticleScreen extends StatefulWidget {
   const NewArticleScreen({Key? key}) : super(key: key);
