@@ -17,9 +17,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _postalCodeController = TextEditingController();
   final TextEditingController _birthdayController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   User? _user;
   bool _isLoading = true;
+  bool _isEditing = false;
 
   @override
   void initState() {
@@ -58,6 +60,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _changePassword() async {
+    if (_user != null) {
+      try {
+        await _user!.updatePassword(_passwordController.text);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Mot de passe mis à jour')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur: ${e.toString()}')),
+        );
+      }
+    }
+  }
+
   Future<void> _signOut() async {
     await _auth.signOut();
     Navigator.pushReplacementNamed(context, '/login');
@@ -77,14 +94,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 60,
-              backgroundColor: Color(0xFFE6F1FD),
-              child: Icon(
-                Icons.person,
-                size: 60,
-                color: Colors.orangeAccent,
-              ),
+            Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                CircleAvatar(
+                  radius: 60,
+                  backgroundColor: Color(0xFFE6F1FD),
+                  child: Icon(
+                    Icons.person,
+                    size: 60,
+                    color: Colors.orangeAccent,
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: IconButton(
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
+                    icon: Icon(
+                      _isEditing ? Icons.cancel : Icons.edit,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isEditing = !_isEditing;
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             TextFormField(
@@ -97,14 +138,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              initialValue: '********',
-              decoration: const InputDecoration(
-                labelText: 'Mot de passe',
-                labelStyle: TextStyle(color: Colors.black),
-              ),
-              readOnly: true,
-              style: const TextStyle(fontSize: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _passwordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Mot de passe',
+                      labelStyle: TextStyle(color: Colors.black),
+                    ),
+                    obscureText: true,
+                    readOnly: !_isEditing,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+                if (_isEditing)
+                  IconButton(
+                    icon: const Icon(
+                      Icons.check,
+                      color: Colors.green,
+                    ),
+                    onPressed: _changePassword,
+                  ),
+              ],
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -113,6 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 labelText: 'Date de naissance',
                 labelStyle: TextStyle(color: Colors.black),
               ),
+              readOnly: !_isEditing,
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
@@ -122,6 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 labelText: 'Adresse',
                 labelStyle: TextStyle(color: Colors.black),
               ),
+              readOnly: !_isEditing,
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
@@ -131,6 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 labelText: 'Ville',
                 labelStyle: TextStyle(color: Colors.black),
               ),
+              readOnly: !_isEditing,
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
@@ -140,6 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 labelText: 'Code postal',
                 labelStyle: TextStyle(color: Colors.black),
               ),
+              readOnly: !_isEditing,
               keyboardType: TextInputType.number,
               style: const TextStyle(fontSize: 16),
             ),
@@ -168,5 +228,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
-  }
-}
+  }}
