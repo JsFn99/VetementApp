@@ -86,6 +86,8 @@ class _CartScreenState extends State<CartScreen> {
     }
     return Scaffold(
       appBar: AppBar(
+        // appbar should never have a back button
+        automaticallyImplyLeading: false,
         leading: widget.fromDetails
             ? IconButton(
           icon: const Icon(Icons.close),
@@ -94,6 +96,7 @@ class _CartScreenState extends State<CartScreen> {
           },
         )
             : null,
+
       ),
       body: GestureDetector(
         onVerticalDragEnd: (details) {

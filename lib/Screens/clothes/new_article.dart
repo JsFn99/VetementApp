@@ -111,7 +111,7 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ajouter un article', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-        backgroundColor: const Color(0xFF2661FA),
+        backgroundColor: const Color(0xFF1E90FF),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -150,18 +150,6 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
                   ),
                 const SizedBox(height: 16),
 
-                // Predicted Category Field
-                if (_isLoading)
-                  const Center(child: CircularProgressIndicator())
-                else
-                  TextFormField(
-                    controller: _categoryController,
-                    decoration: const InputDecoration(labelText: 'Catégorie'),
-                    enabled: false,
-                    style: TextStyle(color: Colors.black),
-                  ),
-                const SizedBox(height: 16),
-
                 // Title Field
                 TextFormField(
                   controller: _titleController,
@@ -173,6 +161,18 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
                     return null;
                   },
                 ),
+                const SizedBox(height: 16),
+
+                // Predicted Category Field
+                if (_isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else
+                  TextFormField(
+                    controller: _categoryController,
+                    decoration: const InputDecoration(labelText: 'Catégorie'),
+                    enabled: false,
+                    style: TextStyle(color: Colors.black),
+                  ),
                 const SizedBox(height: 16),
 
                 // Size Field
