@@ -178,7 +178,7 @@ class DetailScreen extends StatelessWidget {
                 },
 
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2661FA),
+                  backgroundColor: const Color(0xFF1E90FF),
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),

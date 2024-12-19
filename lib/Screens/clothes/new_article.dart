@@ -235,7 +235,7 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
                   child: ElevatedButton(
                     onPressed: _addArticle,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2661FA),
+                      backgroundColor: const Color(0xFF1E90FF),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 40, vertical: 16),
                       shape: RoundedRectangleBorder(

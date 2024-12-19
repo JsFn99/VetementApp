@@ -244,7 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: _updateUserProfile,
               child: const Text('Valider', style: TextStyle(fontSize: 18, color: Colors.white)),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2661FA),
+                backgroundColor: const Color(0xFF1E90FF),
                 padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
@@ -260,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             MaterialPageRoute(builder: (context) => const NewArticleScreen()),
           );
         },
-        backgroundColor: const Color(0xFF2661FA),
+        backgroundColor: const Color(0xFF1E90FF),
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
