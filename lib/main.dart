@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'Screens/cart/cart.dart';
-import 'Screens/home/details.dart';
+import 'Screens/clothes/details.dart';
 import 'Screens/home/home.dart';
 import 'Screens/login/login.dart';
 import 'Screens/profil/profil.dart';
