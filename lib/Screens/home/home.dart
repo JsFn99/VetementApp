@@ -4,7 +4,6 @@ import '../../components/bottomBar.dart';
 import '../login/login.dart';
 import '../cart/cart.dart';
 import '../profil/profil.dart';
-import '../clothes/new_article.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
