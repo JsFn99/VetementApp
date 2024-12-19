@@ -14,7 +14,6 @@ Ce projet est une application de magasin de vêtements développée avec Flutter
 
 - Flutter SDK
 - Firebase project configuré
-- Un éditeur de code comme IntelliJ IDEA
 
 ## Installation
 
