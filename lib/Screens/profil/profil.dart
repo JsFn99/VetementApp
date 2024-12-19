@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../home/new_article.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -70,90 +71,101 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            radius: 60,
-            backgroundColor: Color(0xFFE6F1FD),
-            child: Icon(
-              Icons.person,
-              size: 60,
-              color: Colors.orangeAccent,
-            ),
-          ),
-          const SizedBox(height: 20),
-          TextFormField(
-            initialValue: _user!.email,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              labelStyle: TextStyle(color: Colors.black),
-            ),
-            readOnly: true,
-            style: const TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            initialValue: '********',
-            decoration: const InputDecoration(
-              labelText: 'Mot de passe',
-              labelStyle: TextStyle(color: Colors.black),
-            ),
-            readOnly: true,
-            style: const TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _birthdayController,
-            decoration: const InputDecoration(
-              labelText: 'Date de naissance',
-              labelStyle: TextStyle(color: Colors.black),
-            ),
-            style: const TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _addressController,
-            decoration: const InputDecoration(
-              labelText: 'Adresse',
-              labelStyle: TextStyle(color: Colors.black),
-            ),
-            style: const TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _cityController,
-            decoration: const InputDecoration(
-              labelText: 'Ville',
-              labelStyle: TextStyle(color: Colors.black),
-            ),
-            style: const TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _postalCodeController,
-            decoration: const InputDecoration(
-              labelText: 'Code postal',
-              labelStyle: TextStyle(color: Colors.black),
-            ),
-            keyboardType: TextInputType.number,
-            style: const TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: _updateUserProfile,
-            child: const Text('Valider', style: TextStyle(fontSize: 18, color: Colors.white)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF2661FA),
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+    return Scaffold(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 60,
+              backgroundColor: Color(0xFFE6F1FD),
+              child: Icon(
+                Icons.person,
+                size: 60,
+                color: Colors.orangeAccent,
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            TextFormField(
+              initialValue: _user!.email,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                labelStyle: TextStyle(color: Colors.black),
+              ),
+              readOnly: true,
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              initialValue: '********',
+              decoration: const InputDecoration(
+                labelText: 'Mot de passe',
+                labelStyle: TextStyle(color: Colors.black),
+              ),
+              readOnly: true,
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _birthdayController,
+              decoration: const InputDecoration(
+                labelText: 'Date de naissance',
+                labelStyle: TextStyle(color: Colors.black),
+              ),
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _addressController,
+              decoration: const InputDecoration(
+                labelText: 'Adresse',
+                labelStyle: TextStyle(color: Colors.black),
+              ),
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _cityController,
+              decoration: const InputDecoration(
+                labelText: 'Ville',
+                labelStyle: TextStyle(color: Colors.black),
+              ),
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _postalCodeController,
+              decoration: const InputDecoration(
+                labelText: 'Code postal',
+                labelStyle: TextStyle(color: Colors.black),
+              ),
+              keyboardType: TextInputType.number,
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 32),
+            ElevatedButton(
+              onPressed: _updateUserProfile,
+              child: const Text('Valider', style: TextStyle(fontSize: 18, color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF2661FA),
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const NewArticleScreen()),
+          );
+        },
+        backgroundColor: const Color(0xFF2661FA),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

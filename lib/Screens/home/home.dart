@@ -4,6 +4,7 @@ import '../../components/bottomBar.dart';
 import '../login/login.dart';
 import '../cart/cart.dart';
 import '../profil/profil.dart';
+import 'new_article.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -102,12 +103,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
 
                 // Convert Firebase data into List
-                final clothesList = (snapshot.data!.snapshot.value as List?)?.whereType<Map>().toList() ?? [];
+                final clothesMap = snapshot.data!.snapshot.value as Map<Object?, Object?>;
+                final clothesList = clothesMap.values.toList();
 
                 return ListView.builder(
                   itemCount: clothesList.length,
                   itemBuilder: (context, index) {
-                    final item = clothesList[index];
+                    final item = clothesList[index] as Map;
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 8.0),
                       child: ListTile(
@@ -119,10 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         title: Text(item['title']),
                         subtitle: Text(
-                          "Catégorie: ${item['category']}\nTaille: ${item['size']} - ${item['brand']}\nPrix: \$${item['price']}",
+                            "Taille: ${item['size']}\nPrix: \$${item['price']}"
                         ),
                         onTap: () {
-                          print('Navigating with data: ${item}'); // Debug print
                           Navigator.pushNamed(
                             context,
                             '/details',
