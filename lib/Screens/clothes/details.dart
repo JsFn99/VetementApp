@@ -108,13 +108,21 @@ class DetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 15),
                     Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                          "Pellentesque auctor consectetur tortor vitae interdum.",
+                      "Taille : ${data['size']}",
                       style: GoogleFonts.poppins(
                         fontSize: 16,
-                        color: Colors.grey[600],
+                        color: Colors.grey,
                       ),
                     ),
+                    const SizedBox(height: 15),
+                    Text(
+                      "Categorie : ${data['category']}",
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
                   ],
                 ),
               ),
