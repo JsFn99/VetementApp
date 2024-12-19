@@ -20,5 +20,5 @@ Ce projet est une application de magasin de vêtements développée avec Flutter
 
 1. Clonez ce dépôt :
    ```sh
-   git clone [https://github.com/JsFn99/VetementApp](https://github.com/JsFn99/VetementApp.git)
+   git clone https://github.com/JsFn99/VetementApp.git
    cd VetementApp
